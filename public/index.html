@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Data Selfie App</h1>
+    <button id="page"></button>
+    <script>
+        const button = document.getElementById('page')
+        const page = "/page.html"
+        button.textContent = "Other Page"
+        button.addEventListener("click", function() {
+            location.pathname = page
+        })
+    </script>
+</body>
+</html>
