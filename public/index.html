@@ -7,14 +7,11 @@
 </head>
 <body>
     <h1>Data Selfie App</h1>
-    <button id="page"></button>
+    <button id="page" onclick="(() => location.pathname = page)()"></button>
     <script>
         const button = document.getElementById('page')
         const page = "/public/page.html"
         button.textContent = "Other Page"
-        button.addEventListener("click", function() {
-            location.pathname = page
-        })
     </script>
 </body>
 </html>
