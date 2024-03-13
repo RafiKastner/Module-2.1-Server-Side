@@ -16,6 +16,7 @@
   "dependencies": {
     "express": "^4.18.3",
     "live-server": "^1.2.2",
+    "nedb": "^1.8.0",
     "npx": "^10.2.2"
   },
   "devDependencies": {
