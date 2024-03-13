@@ -12,25 +12,31 @@
         longitude: <span id="longitude"></span>&deg;
     </p>
     <button id="page" onclick="(() => location.pathname = page)()">Other Page</button>
-    <button id="submit" onclick="(position())">Send Data</button>
+    <button id="submit" onclick="(position()); (data(globals.lat, globals.lon));">Send Data</button>
     <script>
         const page = "page.html";
+        let globals = {}
 
         if ("geolocation" in navigator) {
             console.log("geolocation available")
-            
+            position();
         } else {
             console.log("geolocation not available");
         }
 
-        async function position(position) {
+        function position() {
             navigator.geolocation.getCurrentPosition(async position => {
                 const lat = position.coords.latitude
                 const lon = position.coords.longitude
                 document.getElementById("latitude").textContent = lat;
                 document.getElementById("longitude").textContent = lon;
+                globals.lat = lat;
+                globals.lon = lon;
+            })
+        }
 
-                const data = {lat, lon}
+        async function data(lat, lon) {
+            const data = {lat, lon}
                 const options = {
                     method: 'POST',
                     headers: {
@@ -41,7 +47,6 @@
                 const response = await fetch('/api', options);
                 const json = await response.json();
                 console.log(json)
-            })
         }
     </script>
 </body>
