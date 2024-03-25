@@ -24,6 +24,7 @@ app.post('/api', (request, response) => {
     response.json({
         status : 'success',
         latitude: data.lat,
-        longitude : data.lon
+        longitude : data.lon,
+        image : data.image64
     })
 });

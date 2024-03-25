@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.2/lib/p5.min.js"></script>
     <title>Data Location App</title>
 </head>
 <body>
@@ -12,41 +13,57 @@
         longitude: <span id="longitude"></span>&deg;
     </p>
     <button id="page" onclick="(() => location.pathname = page)()">List of Data</button>
-    <button id="submit" onclick="(position()); (data(globals.lat, globals.lon));">Send Data</button>
+    <button id="submit">Send Data</button>
     <script>
         const page = "page.html";
-        let globals = {}
+        const submit = document.getElementById("submit");
+        const globals = {}
 
         if ("geolocation" in navigator) {
-            console.log("geolocation available")
-            position();
+             console.log("geolocation available")
+             position();
         } else {
-            console.log("geolocation not available");
+             console.log("geolocation not available");
         }
 
-        function position() {
-            navigator.geolocation.getCurrentPosition(async position => {
-                const lat = position.coords.latitude
-                const lon = position.coords.longitude
-                document.getElementById("latitude").textContent = lat;
-                document.getElementById("longitude").textContent = lon;
-                globals.lat = lat;
-                globals.lon = lon;
+        function setup() {            
+            noCanvas();
+            const video = createCapture(VIDEO);
+            video.size(320,240);
+            video.loadPixels();
+
+            submit.addEventListener('click', () => {
+                position().then(({lat, lon}) => {
+                    const image = video.canvas.toDataURL();
+                    data(lat, lon, image);
+                })
             })
         }
 
-        async function data(lat, lon) {
-            const data = {lat, lon}
-                const options = {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                }
-                const response = await fetch('/api', options);
-                const json = await response.json();
-                console.log(json)
+        function position() {
+            return new Promise((resolve) => {
+                navigator.geolocation.getCurrentPosition(async position => {
+                    const lat = position.coords.latitude
+                    const lon = position.coords.longitude
+                    document.getElementById("latitude").textContent = lat;
+                    document.getElementById("longitude").textContent = lon;
+                    resolve({lat, lon});
+                })
+            })
+        }
+
+        async function data(lat, lon, image64) {
+            const data = {lat, lon, image64}
+            const options = {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }
+            const response = await fetch('/api', options);
+            const json = await response.json();
+            console.log(json)
         }
     </script>
 </body>
