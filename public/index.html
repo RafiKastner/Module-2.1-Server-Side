@@ -12,7 +12,9 @@
         latitude: <span id="latitude"></span>&deg;<br/>
         longitude: <span id="longitude"></span>&deg;
     </p>
-    <button id="page" onclick="(() => location.pathname = page)()">List of Data</button>
+    <button id="page" onclick="(
+        () => location.pathname = page
+    )()">List of Data</button>
     <button id="submit">Send Data</button>
     <script>
         const page = "page.html";
@@ -26,14 +28,13 @@
              console.log("geolocation not available");
         }
 
-        function setup() {            
+        function setup() {      
             noCanvas();
-            const video = createCapture(VIDEO);
+            const video = createCapture(VIDEO)
             video.size(320,240);
-            video.loadPixels();
-
-            submit.addEventListener('click', () => {
+            submit.addEventListener('click', async event => {
                 position().then(({lat, lon}) => {
+                    video.loadPixels();
                     const image = video.canvas.toDataURL();
                     data(lat, lon, image);
                 })
@@ -42,7 +43,7 @@
 
         function position() {
             return new Promise((resolve) => {
-                navigator.geolocation.getCurrentPosition(async position => {
+                navigator.geolocation.getCurrentPosition(position => {
                     const lat = position.coords.latitude
                     const lon = position.coords.longitude
                     document.getElementById("latitude").textContent = lat;

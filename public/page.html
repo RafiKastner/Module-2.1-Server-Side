@@ -20,10 +20,11 @@
                 const geo = document.createElement('div');
                 const date = document.createElement('div');
                 const image = document.createElement('img');
+                console.log(data)
                 
-                geo.textContent = `${item.lat}, ${item.lon}, &deg`;
+                geo.textContent = `${item.lat}°, ${item.lon}°`;
                 const dateString = new Date(item.timestamp).toLocaleString();
-                geo.textContent = dateString;
+                date.textContent = dateString;
                 image.src = item.image64;
 
                 root.append(geo, date, image);
