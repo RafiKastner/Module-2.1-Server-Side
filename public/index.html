@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/p5@1.9.2/lib/p5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Data Location App</title>
 </head>
 <body>
@@ -16,56 +17,6 @@
         () => location.pathname = page
     )()">List of Data</button>
     <button id="submit">Send Data</button>
-    <script>
-        const page = "page.html";
-        const submit = document.getElementById("submit");
-        const globals = {}
-
-        if ("geolocation" in navigator) {
-             console.log("geolocation available")
-             position();
-        } else {
-             console.log("geolocation not available");
-        }
-
-        function setup() {      
-            noCanvas();
-            const video = createCapture(VIDEO)
-            video.size(320,240);
-            submit.addEventListener('click', async event => {
-                position().then(({lat, lon}) => {
-                    video.loadPixels();
-                    const image = video.canvas.toDataURL();
-                    data(lat, lon, image);
-                })
-            })
-        }
-
-        function position() {
-            return new Promise((resolve) => {
-                navigator.geolocation.getCurrentPosition(position => {
-                    const lat = position.coords.latitude
-                    const lon = position.coords.longitude
-                    document.getElementById("latitude").textContent = lat;
-                    document.getElementById("longitude").textContent = lon;
-                    resolve({lat, lon});
-                })
-            })
-        }
-
-        async function data(lat, lon, image64) {
-            const data = {lat, lon, image64}
-            const options = {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            }
-            const response = await fetch('/api', options);
-            const json = await response.json();
-            console.log(json)
-        }
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>
